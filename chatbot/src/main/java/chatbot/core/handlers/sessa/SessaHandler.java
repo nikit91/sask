@@ -48,6 +48,15 @@ public class SessaHandler extends Handler {
         //        response += "]";
 		return obj;
 	}
+	
+	/**
+	 * This is the search method which embeds keyword in URL and pass
+	 * it sendHTTPRequest to create a response. The response is then
+	 * passed to generateResponse method inorder to get the output.
+	 * @param request This is the keyword which is passed by user.
+	 * @return responselist This returns the results from knowledge 
+	 * source against the given keyword.
+	 */
 	public ResponseList search(IncomingRequest request) throws JsonProcessingException, IOException {
 		try {
 			ResponseList responselist = new ResponseList();
