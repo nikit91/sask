@@ -5,7 +5,10 @@ function ex_sendToFred(text) {
 		uri = "./fred-ms/extractSimple";
 	} else if(extractor == "fox") {
 		uri = "./fox-ms/extractSimple";
-	} else {
+	}else if(extractor == "Open IE") {
+		uri = "./OpenIE-ms/extractSimple";
+	} 
+	else {
 		uri = "./spotlight-ms/extractSimple";
 	}
 	

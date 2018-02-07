@@ -35,6 +35,9 @@ zuul:
     spotlight:
       path: /spotlight-ms/**
       serviceId: SPOTLIGHT-MS
+    OpenIE:
+      path: /OpenIE-ms/**
+      serviceId: OPENIE-MS
 
 hystrix:
   command:

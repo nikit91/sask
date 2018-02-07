@@ -20,6 +20,9 @@
 		<module>fox-ms</module>
 		<module>fred-ms</module>
 		<module>chatbot</module>
+		<module>OpenIE-ms</module>
+		<module>DB-ms</module>
+
 	</modules>
 
 	<properties>
