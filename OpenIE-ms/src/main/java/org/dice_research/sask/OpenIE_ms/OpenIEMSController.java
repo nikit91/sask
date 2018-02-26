@@ -95,7 +95,7 @@ public class OpenIEMSController {
 	     
 	    }
 
-	    RDFDataMgr.write( modelAsString, model, Lang.RDFXML );
+	    RDFDataMgr.write( modelAsString, model, Lang.NTRIPLES );
 		return modelAsString.toString();
 	}
 	
