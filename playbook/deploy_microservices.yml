@@ -36,8 +36,8 @@
   tasks:
     - docker_container:
         state : "{{ container_state | default('started') }}"
-        name: "chatbot"
-        hostname: "chatbot"
+        name: "chatbot-instance-{{ item }}"
+        hostname: "chatbot-instance-{{ item }}"
         image: "{{ docker_repository }}/chatbot:latest"
         ports:
           - "{{ (chatbot_instance_base_port | int) + (item | int) }}:{{ (chatbot_instance_base_port | int) + (item | int) }}"
@@ -77,8 +77,8 @@
 
     - docker_container:
         state : "{{ container_state | default('started') }}"
-        name: "webclient"
-        hostname: "webclient"
+        name: "webclient-instance-{{ item }}"
+        hostname: "webclient-instance-{{ item }}"
         image: "{{ docker_repository }}/webclient:latest"
         ports:
           - "{{ (webclient_instance_base_port | int) + (item | int) }}:{{ (webclient_instance_base_port | int) + (item | int) }}"
