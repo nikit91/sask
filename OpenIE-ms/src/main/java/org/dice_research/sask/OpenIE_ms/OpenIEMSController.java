@@ -68,7 +68,6 @@ public class OpenIEMSController {
 
 	    Model model = ModelFactory.createDefaultModel();
 	    model.setNsPrefix( "", NS );
-	    model.setNsPrefix( "rdf", RDF.getURI() );
 
 	    // Annotate an example document.
 	    
@@ -83,13 +82,11 @@ public class OpenIEMSController {
 	      
 	     for (RelationTriple triple : triples) {
 		
-	   	  Resource statement = model.createResource();
-	         Resource subject = model.createResource().addProperty( RDFS.label, triple.subjectLemmaGloss() );
-	          Property predicate = model.createProperty( NS+URIref.encode( triple.relationLemmaGloss() ));
-	         Resource object = model.createResource().addProperty( RDFS.label, triple.objectLemmaGloss() );
-              statement.addProperty( RDF.subject, subject );
-	          statement.addProperty( RDF.predicate, predicate );
-	          statement.addProperty( RDF.object, object );
+	   	 
+	          Property subject = model.createProperty(NS+URIref.encode(triple.subjectLemmaGloss()));
+	          Property predicate = model.createProperty(NS+URIref.encode(triple.relationLemmaGloss()));
+	          Property object = model.createProperty( NS+URIref.encode(triple.objectLemmaGloss() ));
+	        model.add(subject, predicate, object);
 
 	      }
 	     
