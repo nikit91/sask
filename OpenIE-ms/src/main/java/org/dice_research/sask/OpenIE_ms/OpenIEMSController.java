@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import edu.stanford.nlp.ie.util.RelationTriple;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.pipeline.Annotation;
@@ -46,56 +45,48 @@ public class OpenIEMSController {
 		openIE.setText(input);
 		return extract(openIE);
 	}
-	
-	
 
 	public String extract(OpenIEDTO openIE) {
 		logger.info("OpenIE-microservice extract invoked");
 
-		if (openIE == null || openIE.getText() == null || (openIE.getText()
-                .trim()
-                .isEmpty())) {
+		if (openIE == null || openIE.getText() == null || (openIE.getText().trim().isEmpty())) {
 			throw new IllegalArgumentException("No input");
 		}
 
 		// Create the Stanford CoreNLP pipeline
-	    Properties props = new Properties();
-	    props.setProperty("annotators", "tokenize,ssplit,pos,lemma,depparse,natlog,openie");
-	    StringWriter modelAsString = new StringWriter();
+		Properties props = new Properties();
+		props.setProperty("annotators", "tokenize,ssplit,pos,lemma,depparse,natlog,openie");
+		StringWriter modelAsString = new StringWriter();
 
-	    StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
-	    String NS = "http://example.org/";
+		StanfordCoreNLP pipeline = new StanfordCoreNLP(props);
+		String NS = "http://example.org/";
 
-	    Model model = ModelFactory.createDefaultModel();
-	    model.setNsPrefix( "", NS );
+		Model model = ModelFactory.createDefaultModel();
+		model.setNsPrefix("", NS);
 
-	    // Annotate an example document.
-	    
-	    Annotation doc = new Annotation(openIE.getText()); 
-	    pipeline.annotate(doc);
-	    Collection<RelationTriple> triples;
-	    // Loop over sentences in the document
-	    for (CoreMap sentence : doc.get(CoreAnnotations.SentencesAnnotation.class)) {
-	      // Get the OpenIE triples for the sentence
-	      triples = sentence.get(NaturalLogicAnnotations.RelationTriplesAnnotation.class);
-	    
-	      
-	     for (RelationTriple triple : triples) {
-		
-	   	 
-	          Property subject = model.createProperty(NS+URIref.encode(triple.subjectLemmaGloss()));
-	          Property predicate = model.createProperty(NS+URIref.encode(triple.relationLemmaGloss()));
-	          Property object = model.createProperty( NS+URIref.encode(triple.objectLemmaGloss() ));
-	        model.add(subject, predicate, object);
+		// Annotate an example document.
 
-	      }
-	     
-	    }
+		Annotation doc = new Annotation(openIE.getText());
+		pipeline.annotate(doc);
+		Collection<RelationTriple> triples;
+		// Loop over sentences in the document
+		for (CoreMap sentence : doc.get(CoreAnnotations.SentencesAnnotation.class)) {
+			// Get the OpenIE triples for the sentence
+			triples = sentence.get(NaturalLogicAnnotations.RelationTriplesAnnotation.class);
+			for (RelationTriple triple : triples) {
 
-	    RDFDataMgr.write( modelAsString, model, Lang.NTRIPLES );
+				Property subject = model.createProperty(NS + URIref.encode(triple.subjectLemmaGloss()));
+				Property predicate = model.createProperty(NS + URIref.encode(triple.relationLemmaGloss()));
+				Property object = model.createProperty(NS + URIref.encode(triple.objectLemmaGloss()));
+				model.add(subject, predicate, object);
+
+			}
+
+		}
+
+		RDFDataMgr.write(modelAsString, model, Lang.NTRIPLES);
 		return modelAsString.toString();
 	}
-	
 
 	@ExceptionHandler
 	void handleIllegalArgumentException(IllegalArgumentException e, HttpServletResponse response) throws IOException {
